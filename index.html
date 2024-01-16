@@ -39,47 +39,39 @@
                 phone
             };
 
-            axios.post("https://crudcrud.com/api/2374c42e6ba54f1cbb1a21f4b8b1a14c/appointment",user)
-            .then((res)=>{
-              displayUsers();
-              console.log(res);
+            axios.post("https://crudcrud.com/api/2374c42e6ba54f1cbb1a21f4b8b1a14c/appointment", user)
+            .then((res) => {
+                // Display users on the screen
+                displayUsers(user);
+                console.log(res);
             })
-            .catch((err)=>{
-              console.log(err);
-            })
-            // Store user details in local storage
-            //saveUser(user);
-
-            // Display users on the screen
-           
+            .catch((err) => {
+                console.log(err);
+            });
         }
 
-        function saveUser(user) {
-            // Check if users array exists in local storage
-            let users = JSON.parse(localStorage.getItem('users')) || [];
+        window.addEventListener("DOMContentLoaded", () => {
+            axios.get("https://crudcrud.com/api/2374c42e6ba54f1cbb1a21f4b8b1a14c/appointment")
+            .then((response) => {
+                console.log(response);
 
-            users.push(user);
+                for (var i = 0; i < response.data.length; i++) {
+                    displayUsers(response.data[i]);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        });
 
-            // Save the updated array back to local storage
-            localStorage.setItem('users', JSON.stringify(users));
-        }
-
-        function displayUsers() {
+        function displayUsers(user) {
             // Get the unordered list element
             const userList = document.getElementById('userList');
 
-            // Clear the existing list items
-            userList.innerHTML = '';
-
-            // Retrieve users from local storage
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-
-            // Create list items and append them to the unordered list
-            users.forEach((user) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `${user.username} - ${user.email} - ${user.phone}`;
-                userList.appendChild(listItem);
-            });
+            // Create list item and append it to the unordered list
+            const listItem = document.createElement('li');
+            listItem.textContent = `${user.username} - ${user.email} - ${user.phone}`;
+            userList.appendChild(listItem);
         }
     </script>
 </body>
